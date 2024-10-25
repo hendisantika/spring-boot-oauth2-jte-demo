@@ -221,3 +221,35 @@ src/
    - Verify redirect URIs
    - Protect client secrets
    - Use environment variables
+
+### Image Screenshots
+
+Welcome Page
+
+![Welcome Page](img/welcome.png "Welcome Page")
+
+Login Page
+
+![Login Page](img/login.png "Login Page")
+
+Dashboard Page
+
+![Dashboard Page](img/dashboard1.png "Dashboard Page")
+
+GitHub OAuth2 Login Page
+
+![GitHub OAuth2 Login Page](img/github.png "GitHub OAuth2 Login Page")
+
+Dashboard Page 2
+
+![Dashboard Page 2](img/dashboard2.png "Dashboard Page 2")
+
+Google OAuth2 Login Page
+
+![Google OAuth2 Login Page](img/google.png "Google OAuth2 Login Page")
+
+Dashboard Page 3
+
+![Dashboard Page 3](img/dashboard3.png "Dashboard Page 3")
+
+
