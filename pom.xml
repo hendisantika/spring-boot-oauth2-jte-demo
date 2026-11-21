@@ -14,7 +14,7 @@
     <name>spring-boot-oauth2-jte-demo</name>
     <description>spring-boot-oauth2-jte-demo</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
     </properties>
     <dependencies>
         <dependency>
