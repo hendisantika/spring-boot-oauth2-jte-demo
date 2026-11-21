@@ -13,11 +13,24 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    permissions:
+      # Required by the dependency submission step (push to main only)
+      contents: write
 
     steps:
     - uses: actions/checkout@v7
@@ -28,8 +41,10 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: ./mvnw -B -ntp verify --file pom.xml
 
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+    # Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts.
+    # Only on push to main: pull request tokens (e.g. Dependabot PRs) are read-only and the submission would fail.
     - name: Update dependency graph
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: advanced-security/maven-dependency-submission-action@a64327a7329c9939cf675e458452febe1894a70c
