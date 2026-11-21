@@ -1,5 +1,11 @@
 # Spring Boot OAuth2 Login Demo
 
+[![Java CI with Maven](https://github.com/hendisantika/spring-boot-oauth2-jte-demo/actions/workflows/maven.yml/badge.svg)](https://github.com/hendisantika/spring-boot-oauth2-jte-demo/actions/workflows/maven.yml)
+![Java](https://img.shields.io/badge/Java-25-orange?logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.x-6DB33F?logo=springboot)
+![jte](https://img.shields.io/badge/jte-3.2.x-blue)
+[![Dependabot](https://img.shields.io/badge/Dependabot-enabled-025E8C?logo=dependabot)](.github/dependabot.yml)
+
 This project demonstrates how to implement OAuth2 authentication in a Spring Boot application using custom login pages
 with JTE (Java Template Engine) and Tailwind CSS. It includes both traditional form login and OAuth2 login with Google
 and GitHub.
@@ -14,10 +20,20 @@ and GitHub.
 - Secure logout functionality
 - CSRF protection
 
+## Tech Stack
+
+| Component            | Version                                        |
+|----------------------|------------------------------------------------|
+| Java                 | 25 (Temurin)                                   |
+| Spring Boot          | 4.1.x                                          |
+| Spring Security      | OAuth2 Client + form login                     |
+| jte                  | 3.2.x (precompiled via `jte-maven-plugin`)     |
+| Build tool           | Maven 3.10.x via Maven Wrapper (`./mvnw`)      |
+
 ## Prerequisites
 
-- Java 17 or later
-- Maven 3.9.9
+- Java 25 (JDK 25, e.g. [Eclipse Temurin](https://adoptium.net/))
+- Maven is optional: the bundled Maven Wrapper (`./mvnw`) downloads Maven 3.10.x automatically
 - Google Cloud account (for Google OAuth)
 - GitHub account (for GitHub OAuth)
 
@@ -26,8 +42,8 @@ and GitHub.
 1. Clone the repository
 
 ```bash
-git clone https://github.com/danvega/spring-boot-oauth-demo.git
-cd spring-boot-oauth-demo
+git clone https://github.com/hendisantika/spring-boot-oauth2-jte-demo.git
+cd spring-boot-oauth2-jte-demo
 ```
 
 2. Configure OAuth credentials (see OAuth Setup sections below)
@@ -44,10 +60,16 @@ export GITHUB_CLIENT_SECRET=your_github_client_secret
 4. Run the application
 
 ```bash
-mvn clean spring-boot:run
+./mvnw clean spring-boot:run
 ```
 
 5. Visit http://localhost:8080
+
+To build and run the tests:
+
+```bash
+./mvnw clean verify
+```
 
 ## Default User Credentials
 
@@ -134,10 +156,13 @@ spring:
 src/
   main/
     java/
-      id.my.hendisantika.config/
-          SecurityConfig.java    # Spring Security configuration
-          LoginController.java   # Login handling
-          DashboardController.java # Dashboard pages
+      id/my/hendisantika/oauth2jtedemo/
+        SpringBootOauth2JteDemoApplication.java  # Main class
+        config/
+          SecurityConfig.java       # Spring Security configuration
+        controller/
+          LoginController.java      # Login handling
+          DashboardController.java  # Dashboard pages
     resources/
       application.yml           # Application configuration
     jte/
@@ -171,11 +196,34 @@ src/
    <!-- JTE Template Engine -->
    <dependency>
       <groupId>gg.jte</groupId>
-      <artifactId>jte-spring-boot-starter</artifactId>
-      <version>3.1.9</version>
+      <artifactId>jte</artifactId>
+      <version>3.2.5</version>
+   </dependency>
+   <dependency>
+      <groupId>gg.jte</groupId>
+      <artifactId>jte-spring-boot-starter-3</artifactId>
+      <version>3.2.5</version>
    </dependency>
 </dependencies>
 ```
+
+## Continuous Integration
+
+GitHub Actions ([`.github/workflows/maven.yml`](.github/workflows/maven.yml)) runs on every push and pull request to `main`:
+
+- Sets up JDK 25 (Temurin) with Maven dependency caching
+- Builds and tests the project with `./mvnw -B verify`
+- Submits the Maven dependency graph to GitHub (push to `main` only) to power Dependabot alerts
+- Cancels outdated runs for the same branch via `concurrency`
+
+## Dependency Updates (Dependabot)
+
+[`.github/dependabot.yml`](.github/dependabot.yml) keeps dependencies up to date:
+
+- **Maven** - checked daily at 05:00 (Asia/Jakarta), PR prefix `chore(deps)`
+  - Grouped updates: `spring-boot` (Spring Boot & Spring Security), `jte`, `maven-plugins`, `test-dependencies`
+- **GitHub Actions** - checked weekly (Monday 05:00 Asia/Jakarta), all actions grouped in one PR, prefix `ci(deps)`
+- PRs are labeled (`dependencies`, `java` / `github_actions`) and assigned automatically
 
 ## Troubleshooting
 
